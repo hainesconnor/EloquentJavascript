@@ -214,3 +214,42 @@ function yourRobot2({place, parcels}, route) {
   }
   
   compareRobots(yourRobot, [], yourRobot2, [])
+
+  //Exercise 3
+  //Creat a simplified version of a set, but which uses persistent data
+  //PGroup has add, delete, and has methods
+  
+  class PGroup {
+    constructor (array = []) {
+        this.members=array;
+    }
+    
+    //add
+    add(x) {
+      return new PGroup(this.members.concat(x));
+    }
+    
+    //delete
+    delete(x) {
+      return new PGroup(this.members.filter(y => y != x));
+    }
+    
+    //has
+    has (x) {
+      if (this.members.indexOf(x) == -1)
+        return false;
+      return true;
+    }
+  }
+  
+  PGroup.empty = new PGroup;
+  
+  let a = PGroup.empty.add("a");
+  let ab = a.add("b");
+  let b = ab.delete("a");
+  console.log(b.has("b"));
+  // → true
+  console.log(a.has("b"));
+  // → false
+  console.log(b.has("a"));
+  // → false
