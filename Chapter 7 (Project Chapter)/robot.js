@@ -216,6 +216,7 @@ function yourRobot2({place, parcels}, route) {
   compareRobots(yourRobot, [], yourRobot2, [])
 
   //Exercise 3
+  //This exercise is independent from the rest of the Ch. 7 code 
   //Creat a simplified version of a set, but which uses persistent data
   //PGroup has add, delete, and has methods
   
@@ -226,12 +227,14 @@ function yourRobot2({place, parcels}, route) {
     
     //add
     add(x) {
+      if (this.has(x)) return this;  
       return new PGroup(this.members.concat(x));
     }
     
     //delete
     delete(x) {
-      return new PGroup(this.members.filter(y => y != x));
+      if (!this.has(x)) return this;
+      return new PGroup(this.members.filter(y => y !== x));
     }
     
     //has
