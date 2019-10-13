@@ -183,3 +183,34 @@ function yourRobot({place, parcels}, route) {
   runRobot(VillageState.random(), yourRobot, []);
   
   compareRobots(yourRobot, [], goalOrientedRobot, []);
+
+//incrementally improves my robot by favoring picking up a parcel
+//instead of deliveringa parcel when the route lengths are equal
+//this is a very small improvement, but it is an improvement on average
+function yourRobot2({place, parcels}, route) {
+    let routeOption = [];
+    let pickupKey;
+    if (route.length == 0) {
+      for (let parcel of parcels) {
+              if (parcel.place != place) {
+            routeOption = findRoute(roadGraph, place, parcel.place);
+            pickupKey = 1;
+          } else {
+                routeOption = findRoute(roadGraph, place, parcel.address);
+            pickupKey = 0;
+          }
+            if (route.length == 0) {
+            route = routeOption;
+          }
+            else if (routeOption.length < route.length) {
+            route = routeOption;
+          }
+            else if (routeOption.length == route.length && pickupKey == 1) {
+            route = routeOption;
+          }
+        }
+    }
+    return {direction: route[0], memory: route.slice(1)};
+  }
+  
+  compareRobots(yourRobot, [], yourRobot2, [])
