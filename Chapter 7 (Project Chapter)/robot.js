@@ -139,7 +139,8 @@ function runRobotMoves(state, robot, memory) {
     }
   }
 
-//Compares two robots 
+//Compares two robots by having each robot complete 100 tasks
+//Prints avg. number of moves to complete task for each robot
 function compareRobots(robot1, memory1, robot2, memory2) {
     let robot1Log = [], robot2Log = [];
     for (let i=0; i<100; i++) {
@@ -153,3 +154,32 @@ function compareRobots(robot1, memory1, robot2, memory2) {
     console.log("Robot1 avg. moves: " + avgMoves(robot1Log) + 
         "\nRobot2 avg. moves: " + avgMoves(robot2Log));
 }
+
+//Exercise 2
+//Create a robot that is more efficient than goalOrientedRobot
+
+//instead of finding the most efficient route to the next parcel,
+//this function looks at all parcels and then chooses the most 
+//efficient route to the nearest parcel
+function yourRobot({place, parcels}, route) {
+    let routeOption = [];
+    if (route.length == 0) {
+      for (let parcel of parcels) {
+              if (parcel.place != place) {
+            routeOption = findRoute(roadGraph, place, parcel.place);
+          } else {
+                routeOption = findRoute(roadGraph, place, parcel.address);
+          }
+            if (route.length == 0) {
+            route = routeOption;
+          }
+            else if (routeOption.length < route.length) {
+            route = routeOption;
+          }
+        }
+    }
+    return {direction: route[0], memory: route.slice(1)};
+  }
+  runRobot(VillageState.random(), yourRobot, []);
+  
+  compareRobots(yourRobot, [], goalOrientedRobot, []);
