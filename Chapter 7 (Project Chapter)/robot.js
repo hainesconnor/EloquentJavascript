@@ -1,3 +1,5 @@
+//Provided Chapter Code. Scroll down for my edits. 
+
 var roads = [
   "Alice's House-Bob's House",   "Alice's House-Cabin",
   "Alice's House-Post Office",   "Bob's House-Town Hall",
@@ -117,4 +119,37 @@ function goalOrientedRobot({place, parcels}, route) {
     }
   }
   return {direction: route[0], memory: route.slice(1)};
+}
+
+//Chapter Excercises
+
+//Excercise 1: Robot Efficiency 
+// Creates 100 tasks for two different robots to run.
+// Return avg. number of completion moves for each robot. 
+
+//Runs robot and returns number of moves
+function runRobotMoves(state, robot, memory) {
+    for (let turn = 0;; turn++) {
+      if (state.parcels.length == 0) {
+        return turn;
+      }
+      let action = robot(state, memory);
+      state = state.move(action.direction);
+      memory = action.memory;
+    }
+  }
+
+//Compares two robots 
+function compareRobots(robot1, memory1, robot2, memory2) {
+    let robot1Log = [], robot2Log = [];
+    for (let i=0; i<100; i++) {
+        let state = VillageState.random();
+        robot1Log.push(runRobotMoves(state, robot1, memory1));
+        robot2Log.push(runRobotMoves(state, robot2, memory2)); 
+    }
+    function avgMoves (robotLog) {
+        return robotLog.reduce((x,y) => x + y) / robotLog.length; 
+    }
+    console.log("Robot1 avg. moves: " + avgMoves(robot1Log) + 
+        "\nRobot2 avg. moves: " + avgMoves(robot2Log));
 }
