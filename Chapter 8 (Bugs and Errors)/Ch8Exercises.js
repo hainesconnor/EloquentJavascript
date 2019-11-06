@@ -74,3 +74,44 @@ function reliableMultiply(a, b) {
 
 console.log(reliableMultiply(8, 8));
 
+//Exercise 2
+// Suppose there is this box object with a lock
+//Write a funciton that takes a funciton as an argument, unlocks the box, runs the funcition, and then ensures the box is locked again
+
+const box = {
+  locked: true,
+  unlock() { this.locked = false; },
+  lock() { this.locked = true;  },
+  _content: [],
+  get content() {
+    if (this.locked) throw new Error("Locked!");
+    return this._content;
+  }
+};
+
+function withBoxUnlocked(body) {
+  // Your code here.
+  if (!box.locked) {
+    return body();
+  }
+  box.unlock()
+  try {
+  return body();
+  } finally {
+    box.lock();
+  }	  
+}
+
+withBoxUnlocked(function() {
+  box.content.push("gold piece");
+});
+
+try {
+  withBoxUnlocked(function() {
+    throw new Error("Pirates on the horizon! Abort!");
+  });
+} catch (e) {
+  console.log("Error raised: " + e);
+} 
+
+console.log(box.locked);
