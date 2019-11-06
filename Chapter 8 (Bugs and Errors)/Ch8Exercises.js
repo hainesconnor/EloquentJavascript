@@ -49,4 +49,28 @@ function promptDirection(question) {
 //Exercises
 
 //Exercise 1
-//
+//Suppsoe a 'primitive' multplier only works 20% of the time. Write a 'realiable' multiplier funciton that
+//keeps calling the primitive multipier until it works. 
+
+class MultiplicatorUnitFailure extends Error {}
+
+function primitiveMultiply(a, b) {
+  if (Math.random() < 0.2) {
+    return a * b;
+  } else {
+    throw new MultiplicatorUnitFailure("Klunk");
+  }
+}
+
+function reliableMultiply(a, b) {
+  // Your code here.
+    try {
+      return primitiveMultiply(a, b);
+    } catch (e) {
+      if (e instanceof MultiplicatorUnitFailure) return reliableMultiply(a, b);
+      else throw (e);
+    }    
+}
+
+console.log(reliableMultiply(8, 8));
+
